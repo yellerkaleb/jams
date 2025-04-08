@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Age Logger</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+    }
+    #result {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    #log {
+      margin-top: 30px;
+      white-space: pre-wrap;
+      background: #f4f4f4;
+      padding: 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>When is your birth year?</h2>
+  <input type="number" id="birthYear" placeholder="e.g. 1990" />
+  <button onclick="calculateAndSave()">Calculate Age</button>
+  
+  <div id="result"></div>
+  <h3>CSV Log:</h3>
+  <div id="log"></div>
+
+  <script>
+    function calculateAndSave() {
+      const birthYear = parseInt(document.getElementById('birthYear').value);
+      const currentYear = new Date().getFullYear();
+      const result = document.getElementById('result');
+      const log = document.getElementById('log');
+
+      if (isNaN(birthYear) || birthYear > currentYear || birthYear < 1900) {
+        result.textContent = "Please enter a valid birth year.";
+        return;
+      }
+
+      const age = currentYear - birthYear;
+      result.textContent = `You are ${age} years old.`;
+
+      // Load existing data
+      let entries = JSON.parse(localStorage.getItem('ageLog') || '[]');
+      
+      // Add new entry
+      entries.push({ birthYear, age });
+
+      // Save back to localStorage
+      localStorage.setItem('ageLog', JSON.stringify(entries));
+
+      // Convert to CSV-like display
+      let csvText = "Birth Year | Age\n" + entries.map(e => `${e.birthYear} | ${e.age}`).join('\n');
+      log.textContent = csvText;
+    }
+
+    // On page load, show existing log
+    window.onload = () => {
+      const log = document.getElementById('log');
+      let entries = JSON.parse(localStorage.getItem('ageLog') || '[]');
+      if (entries.length) {
+        let csvText = "Birth Year | Age\n" + entries.map(e => `${e.birthYear} | ${e.age}`).join('\n');
+        log.textContent = csvText;
+      }
+    }
+  </script>
+
+</body>
+</html>
