@@ -1,9 +1,41 @@
-<html>
-<script src="jams.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Age Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+    }
+    #result {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
 
-<script>
-    test();
-</script>
+  <h2>When is your birth year?</h2>
+  <input type="number" id="birthYear" placeholder="e.g. 1990" />
+  <button onclick="calculateAge()">Calculate Age</button>
+  
+  <div id="result"></div>
 
+  <script>
+    function calculateAge() {
+      const birthYear = parseInt(document.getElementById('birthYear').value);
+      const currentYear = new Date().getFullYear();
+      const result = document.getElementById('result');
 
+      if (isNaN(birthYear) || birthYear > currentYear || birthYear < 1900) {
+        result.textContent = "Please enter a valid birth year.";
+      } else {
+        const age = currentYear - birthYear;
+        result.textContent = `You are ${age} years old.`;
+      }
+    }
+  </script>
+
+</body>
 </html>
